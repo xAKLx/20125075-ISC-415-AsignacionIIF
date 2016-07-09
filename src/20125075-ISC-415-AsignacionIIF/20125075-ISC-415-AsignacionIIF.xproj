@@ -14,6 +14,7 @@
   </PropertyGroup>
   <PropertyGroup>
     <SchemaVersion>2.0</SchemaVersion>
+    <ApplicationInsightsResourceId>/subscriptions/c0bc9ed6-5e27-4585-a7b7-40b8198e298e/resourcegroups/Default-ApplicationInsights-CentralUS/providers/microsoft.insights/components/20125075-ISC-415-AsignacionIIF</ApplicationInsightsResourceId>
   </PropertyGroup>
   <ItemGroup>
     <DnxInvisibleContent Include="bower.json" />
