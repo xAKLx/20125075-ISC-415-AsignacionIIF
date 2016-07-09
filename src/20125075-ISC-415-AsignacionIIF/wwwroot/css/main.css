@@ -1,0 +1,47 @@
+﻿#contactsContainer{
+    padding: 20px;
+}
+
+#contacts{
+    height: 100%;
+    border: 1px solid red;
+}
+
+.contact{
+    padding: 35px 0;
+    border: 1px solid black;
+}
+
+.contact:hover{
+    background-color: antiquewhite;
+}
+
+.contactName{
+    height: 100%;
+}
+
+#chatContainer{
+    padding: 20px;
+}
+
+#chat{
+    height: 100%;
+    border: 1px solid blue;
+}
+
+.message{
+
+}
+
+html, body 
+{
+    height: 100%;
+
+}
+
+.fullheight, .container-fluid, .span9, .container, #contactsContainer, #chatContainer, #contacts, #chat
+{
+    border: 1px solid #000;
+    overflow-y:auto;
+    height:100%;
+}
