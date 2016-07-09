@@ -105,9 +105,15 @@ namespace _20125075_ISC_415_AsignacionIIF.Controllers
             ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
-                var result = await _userManager.CreateAsync(user, model.Password);
-                if (result.Succeeded)
+                var user = new ApplicationUser { UserName = model.Name};
+                var result = await _userManager.CreateAsync(user);
+                var duplicated = false;
+
+                if (result.Errors.Count<IdentityError>() == 1)
+                    if (result.Errors.First<IdentityError>().Code == "DuplicatedUser")
+                        duplicated = true;
+
+                if (result.Succeeded || duplicated)
                 {
                     // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=532713
                     // Send an email with this link

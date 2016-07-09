@@ -12,6 +12,7 @@ using Microsoft.Extensions.Logging;
 using _20125075_ISC_415_AsignacionIIF.Data;
 using _20125075_ISC_415_AsignacionIIF.Models;
 using _20125075_ISC_415_AsignacionIIF.Services;
+using Microsoft.AspNetCore.Http;
 
 namespace _20125075_ISC_415_AsignacionIIF
 {
@@ -85,6 +86,15 @@ namespace _20125075_ISC_415_AsignacionIIF
             app.UseIdentity();
 
             // Add external authentication middleware below. To configure them please see http://go.microsoft.com/fwlink/?LinkID=532715
+
+            app.UseCookieAuthentication(new CookieAuthenticationOptions()
+            {
+                AuthenticationScheme = "MyCookieMiddlewareInstance",
+                LoginPath = new PathString("/Account/Register/"),
+                AccessDeniedPath = new PathString("/Account/Forbidden/"),
+                AutomaticAuthenticate = true,
+                AutomaticChallenge = true
+            });
 
             app.UseMvc(routes =>
             {
