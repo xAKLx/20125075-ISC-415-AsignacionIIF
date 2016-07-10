@@ -12,5 +12,10 @@ namespace _20125075_ISC_415_AsignacionIIF.Models.AccountViewModels
         [Display(Name = "Name")]
         [MinLength(3)]
         public string Name { get; set; }
+
+        //[Required]
+        //[Display(Name = "Photo")]
+        //[MaxLength(400 * 1024)]
+        //public byte[] Image { get; set; }
     }
 }

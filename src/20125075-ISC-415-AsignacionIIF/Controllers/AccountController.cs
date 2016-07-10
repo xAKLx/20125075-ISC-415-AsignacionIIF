@@ -110,7 +110,7 @@ namespace _20125075_ISC_415_AsignacionIIF.Controllers
                 var duplicated = false;
 
                 if (result.Errors.Count<IdentityError>() == 1)
-                    if (result.Errors.First<IdentityError>().Code == "DuplicatedUser")
+                    if (result.Errors.First<IdentityError>().Code == "DuplicateUserName")
                         duplicated = true;
 
                 if (result.Succeeded || duplicated)

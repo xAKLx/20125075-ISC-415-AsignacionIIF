@@ -1,15 +1,16 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
+ @model _20125075_ISC_415_AsignacionIIF.Models.Users
 
 <div class="row fullheight">
     <div id="contactsContainer" class="col-md-3">
         <div id="contacts" class="col-md-12">
-            @for (int i = 0; i < 20; i++)
+            @foreach (var user in Model.userList)
             {
                 <div class="row contact">
                     <div class="col-md-12 contactName">
-                        @("contact: #" + i.ToString())
+                        @(user)
                     </div>
                 </div>
             }

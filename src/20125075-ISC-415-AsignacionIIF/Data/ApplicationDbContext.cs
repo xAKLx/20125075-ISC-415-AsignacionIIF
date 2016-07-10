@@ -13,6 +13,7 @@ namespace _20125075_ISC_415_AsignacionIIF.Data
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
+            
         }
 
         protected override void OnModelCreating(ModelBuilder builder)
