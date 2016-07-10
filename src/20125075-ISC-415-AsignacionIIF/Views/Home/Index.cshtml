@@ -5,21 +5,35 @@
 
 <div class="row fullheight">
     <div id="contactsContainer" class="col-md-3">
-        <div id="contacts" class="col-md-12">
-            @foreach (var user in Model.userList)
-            {
-                <div class="row contact">
-                    <div class="col-md-12 contactName">
-                        @(user.Key + " Last Logged: " + user.Value)
-                    </div>
-                </div>
-            }
-
-        </div>
+        @Html.Partial("_Users", Model)
     </div>
+    
     <div id="chatContainer" class="col-md-9">
         <div id="chat" class="col-md-12">
 
         </div>
     </div>
 </div>
+
+@section scripts{
+    <script>
+        $(document).ready(function () {
+            var seconds = 3;
+            setInterval(sendRequest, seconds * 1000);
+        });
+
+        function sendRequest() {
+            var request = $.ajax({
+                url: "",
+                method: "GET",
+                dataType: "html"
+            });
+
+            request.done(function (msg) {
+                $("#contactsContainer").html(msg);
+            });
+        }
+
+        
+    </script>
+}

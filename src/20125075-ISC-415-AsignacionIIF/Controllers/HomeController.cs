@@ -8,6 +8,7 @@ using _20125075_ISC_415_AsignacionIIF.Data;
 using _20125075_ISC_415_AsignacionIIF.Models;
 using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Http;
 
 namespace _20125075_ISC_415_AsignacionIIF.Controllers
 {
@@ -16,9 +17,18 @@ namespace _20125075_ISC_415_AsignacionIIF.Controllers
     {
         Users userList = Users.getUniqueInstance();
 
+        
+
         public IActionResult Index()
         {
-            userList.userList.Add(User.Identity.Name, DateTime.Now);
+            if (userList.userList.ContainsKey(User.Identity.Name))
+                userList.userList[User.Identity.Name] = DateTime.Now;
+            else
+                userList.userList.Add(User.Identity.Name, DateTime.Now);
+
+            if (AjaxValidator.IsAjaxRequest(Request))
+                return PartialView("_Users", userList);
+            
             return View(userList);
         }
 
