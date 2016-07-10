@@ -33,8 +33,16 @@ namespace _20125075_ISC_415_AsignacionIIF.Controllers
         }
 
         [HttpPost]
-        public IActionResult Index(string message)
+        public IActionResult Index(string message= "")
         {
+            if (userList.userList.ContainsKey(User.Identity.Name))
+                userList.userList[User.Identity.Name] = DateTime.Now;
+            else
+                userList.userList.Add(User.Identity.Name, DateTime.Now);
+
+            if (AjaxValidator.IsAjaxRequest(Request))
+                return PartialView("_Users", userList);
+
             return View(userList);
         }
 
