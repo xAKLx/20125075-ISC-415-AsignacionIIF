@@ -18,7 +18,13 @@ namespace _20125075_ISC_415_AsignacionIIF.Controllers
 
         public IActionResult Index()
         {
-            userList.userList.Add(User.Identity.Name);
+            userList.userList.Add(User.Identity.Name, DateTime.Now);
+            return View(userList);
+        }
+
+        [HttpPost]
+        public IActionResult Index(string message)
+        {
             return View(userList);
         }
 
