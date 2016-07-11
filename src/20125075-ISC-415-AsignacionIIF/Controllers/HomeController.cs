@@ -146,6 +146,7 @@ namespace _20125075_ISC_415_AsignacionIIF.Controllers
             return View();
         }
 
+        [AllowAnonymous]
         public IActionResult Error()
         {
             return View();
