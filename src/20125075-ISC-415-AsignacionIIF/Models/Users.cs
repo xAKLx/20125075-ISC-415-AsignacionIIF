@@ -10,7 +10,7 @@ namespace _20125075_ISC_415_AsignacionIIF.Models
         private static Users uniqueInstance = null;
         
         public Dictionary<String, DateTime> userList = new Dictionary<String, DateTime>();
-        public Dictionary<Tuple<String, String>, List<String>> userMessages = new Dictionary<Tuple<String, String>, List<String>>();
+        public Dictionary<Tuple<String, String>, List<Message>> userMessages = new Dictionary<Tuple<String, String>, List<Message>>();
 
        private Users()
         {

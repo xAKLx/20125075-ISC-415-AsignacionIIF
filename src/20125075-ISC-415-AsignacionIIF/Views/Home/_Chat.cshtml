@@ -1,9 +1,9 @@
-@model KeyValuePair<Tuple<string, string>, List<String>>
+@model List<Message>
 
-@foreach (var str in Model.Value)
+@foreach (var msg in Model)
             {
     <div class="col-md-12">
-        @str
+        @(msg.From + ": " + msg.Content)
     </div>
 }
 

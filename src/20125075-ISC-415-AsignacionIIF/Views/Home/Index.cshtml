@@ -44,7 +44,7 @@
                 for (var i = 0, len = g.children.length; i < len; i++) {
                     g.children[i].onclick = function () {
                         selectedUser = this.children[0].textContent;
-                        setInterval(requestChat(), seconds * 1000);
+                        setInterval(requestChat, seconds * 1000);
                     }
                 }
         }
