@@ -1,0 +1,11 @@
+@model KeyValuePair<Tuple<string, string>, List<String>>
+
+@foreach (var str in Model.Value)
+            {
+    <div class="col-md-12">
+        @str
+    </div>
+}
+
+@section Scripts {
+}

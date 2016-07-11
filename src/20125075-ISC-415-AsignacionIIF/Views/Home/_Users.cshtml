@@ -1,12 +1,10 @@
-@model _20125075_ISC_415_AsignacionIIF.Models.Users
+@model List<string>
 
 <div id="contacts" class="col-md-12">
-    @foreach (var user in Model.userList)
-            {
+    @foreach (var user in Model)
+    {
         <div class="row contact">
-            <div class="col-md-12 contactName">
-                @(user.Key + " Last Logged: " + user.Value)
-            </div>
+            <div class="col-md-12 contactName">@user</div>
         </div>
     }
 </div>

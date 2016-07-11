@@ -5,18 +5,62 @@
 
 <div class="row fullheight">
     <div id="contactsContainer" class="col-md-3">
-        @Html.Partial("_Users", Model)
+        @{
+            var list = new List<string>();
+
+            foreach (var item in Model.userList)
+            {
+                if (item.Key != User.Identity.Name && item.Value.AddMinutes(5) > DateTime.Now)
+                {
+                    list.Add(item.Key);
+
+                }
+                
+            }
+
+            Html.Partial("_Users", list);
+        }
     </div>
     
     <div id="chatContainer" class="col-md-9">
-        <div id="chat" class="col-md-12">
-
+        <div id="chat" class="col-md-12" style="border: 1px solid blue">
+            
         </div>
+        
+        <input type="text" />
+        <input type="submit" value="Enviar" />
     </div>
 </div>
 
 @section scripts{
     <script>
+        var selectedUser = "";
+
+        function setSelectedClick()
+        {
+            var seconds = 3;
+            var g = document.getElementById('contacts');
+            if(g != null && g.children != null)
+                for (var i = 0, len = g.children.length; i < len; i++) {
+                    g.children[i].onclick = function () {
+                        selectedUser = this.children[0].textContent;
+                        setInterval(requestChat(), seconds * 1000);
+                    }
+                }
+        }
+        
+        setSelectedClick();
+
+        document.getElementById('chatContainer').children[2].onclick = function () {
+            if (selectedUser.length != 0)
+            {
+                sendMessage(document.getElementById('chatContainer').children[1].value);
+            }
+            
+            //document.getElementById('chatContainer').children[1].value
+        }
+
+
         $(document).ready(function () {
             var seconds = 3;
             setInterval(sendRequest, seconds * 1000);
@@ -26,11 +70,43 @@
             var request = $.ajax({
                 url: "",
                 method: "POST",
-                dataType: "html"
+                dataType: "html",
             });
 
             request.done(function (msg) {
                 $("#contactsContainer").html(msg);
+                setSelectedClick();
+            });
+        }
+
+        function requestChat() {
+            var request = $.ajax({
+                url: "",
+                method: "POST",
+                dataType: "html",
+                data: {userName: selectedUser}
+            });
+
+            request.done(function (msg) {
+                $("#chat").html(msg);
+            });
+        }
+
+        function sendMessage(message) {
+            
+            var request = $.ajax({
+                url: "",
+                method: "POST",
+                dataType: "html",
+                data: {
+                    type: "sendMessage",
+                    userName: selectedUser,
+                    message: message
+                }
+            });
+
+            request.done(function (msg) {
+                requestChat();
             });
         }
 
