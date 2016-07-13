@@ -27,11 +27,6 @@ namespace _20125075_ISC_415_AsignacionIIF.Controllers
             this.hostingEnv = env;
         }
 
-        public IActionResult UploadFiles()
-        {
-            return View();
-        }
-
         [AllowAnonymous]
         [HttpPost]
         public IActionResult UploadFiles(IList<IFormFile> files)
@@ -159,33 +154,7 @@ namespace _20125075_ISC_415_AsignacionIIF.Controllers
 
             return View(userList);
         }
-
-        //[HttpPost]
-        //public IActionResult Index(string to = "", string message = "")
-        //{
-        //    if (!userList.userMessages.ContainsKey(new Tuple<string, string>(User.Identity.Name, to)))
-        //        userList.userMessages.Add(new Tuple<string, string>(User.Identity.Name, to), new List<string>());
-
-        //    userList.userMessages[new Tuple<string, string>(User.Identity.Name, to)].Add(message);
-
-        //    return View();
-        //}
         
-
-        public IActionResult About()
-        {
-            ViewData["Message"] = "Your application description page.";
-            
-            return View();
-        }
-
-        public IActionResult Contact()
-        {
-            ViewData["Message"] = "Your contact page.";
-
-            return View();
-        }
-
         [AllowAnonymous]
         public IActionResult Error()
         {
