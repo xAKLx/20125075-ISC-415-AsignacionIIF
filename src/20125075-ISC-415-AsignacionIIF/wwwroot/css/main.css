@@ -20,6 +20,10 @@
     height: 100%;
 }
 
+.contactImage {
+    height: 50px;
+}
+
 #chatContainer{
     padding: 20px;
 }

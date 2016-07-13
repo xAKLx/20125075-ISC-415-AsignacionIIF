@@ -4,7 +4,8 @@
     @foreach (var user in Model)
     {
         <div class="row contact">
-            <div class="col-md-12 contactName">@user</div>
+            <div class="col-md-3"><img class="contactImage image" src="@Users.getUniqueInstance().userImages[user]" /></div>
+            <div class="col-md-9 contactName">@user</div>
         </div>
     }
 </div>

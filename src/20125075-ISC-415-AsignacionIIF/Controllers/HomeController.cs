@@ -9,6 +9,9 @@ using _20125075_ISC_415_AsignacionIIF.Models;
 using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Net.Http.Headers;
+using System.IO;
 
 namespace _20125075_ISC_415_AsignacionIIF.Controllers
 {
@@ -17,7 +20,41 @@ namespace _20125075_ISC_415_AsignacionIIF.Controllers
     {
         Users userList = Users.getUniqueInstance();
 
+        private IHostingEnvironment hostingEnv;
 
+        public HomeController(IHostingEnvironment env)
+        {
+            this.hostingEnv = env;
+        }
+
+        public IActionResult UploadFiles()
+        {
+            return View();
+        }
+
+        [AllowAnonymous]
+        [HttpPost]
+        public IActionResult UploadFiles(IList<IFormFile> files)
+        {
+            long size = 0;
+            foreach (var file in files)
+            {
+                var filename = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
+                size += file.Length;
+
+                var finalFileName = hostingEnv.WebRootPath + $@"\{filename}";
+                for (int count = 1; System.IO.File.Exists(finalFileName); count++)
+                    finalFileName = hostingEnv.WebRootPath + $@"\{count.ToString() + filename}";
+
+                using (FileStream fs = System.IO.File.Create(finalFileName))
+                {
+                    file.CopyTo(fs);
+                    fs.Flush();
+                }
+            }
+            ViewBag.Message = $"{files.Count} file(s) / { size} bytes uploaded successfully!";
+            return View();
+        }
 
         public IActionResult Index()
         {
@@ -82,6 +119,9 @@ namespace _20125075_ISC_415_AsignacionIIF.Controllers
                 userList.userList[User.Identity.Name] = DateTime.Now;
             else
                 userList.userList.Add(User.Identity.Name, DateTime.Now);
+
+            if (!userList.userImages.ContainsKey(User.Identity.Name))
+                userList.userImages.Add(User.Identity.Name, "/images/super_smash_bros_3ds_wii_u_03.jpg");
 
             if (AjaxValidator.IsAjaxRequest(Request))
             {

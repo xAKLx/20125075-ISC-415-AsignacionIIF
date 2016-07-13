@@ -11,6 +11,10 @@ using Microsoft.Extensions.Logging;
 using _20125075_ISC_415_AsignacionIIF.Models;
 using _20125075_ISC_415_AsignacionIIF.Models.AccountViewModels;
 using _20125075_ISC_415_AsignacionIIF.Services;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Net.Http.Headers;
+using Microsoft.AspNetCore.Hosting;
+using System.IO;
 
 namespace _20125075_ISC_415_AsignacionIIF.Controllers
 {
@@ -23,18 +27,24 @@ namespace _20125075_ISC_415_AsignacionIIF.Controllers
         private readonly ISmsSender _smsSender;
         private readonly ILogger _logger;
 
+        private IHostingEnvironment hostingEnv;
+
+        private Users userList = Users.getUniqueInstance();
+
         public AccountController(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
             IEmailSender emailSender,
             ISmsSender smsSender,
-            ILoggerFactory loggerFactory)
+            ILoggerFactory loggerFactory,
+            IHostingEnvironment env)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _emailSender = emailSender;
             _smsSender = smsSender;
             _logger = loggerFactory.CreateLogger<AccountController>();
+            this.hostingEnv = env;
         }
 
         //
@@ -100,7 +110,7 @@ namespace _20125075_ISC_415_AsignacionIIF.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Register(RegisterViewModel model, string returnUrl = null)
+        public async Task<IActionResult> Register(RegisterViewModel model, string returnUrl = null, IList<IFormFile> files= null)
         {
             ViewData["ReturnUrl"] = returnUrl;
             if (ModelState.IsValid)
@@ -115,6 +125,26 @@ namespace _20125075_ISC_415_AsignacionIIF.Controllers
 
                 if (result.Succeeded || duplicated)
                 {
+                    long size = 0;
+                    foreach (var file in files)
+                    {
+                        var filename = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
+                        size += file.Length;
+
+                        var finalFileName = hostingEnv.WebRootPath + "/images/" + $@"\{filename}";
+                        for (int count = 1; System.IO.File.Exists(finalFileName); count++)
+                            finalFileName = hostingEnv.WebRootPath + "/images/" + $@"\{count.ToString() + filename}";
+
+                        using (FileStream fs = System.IO.File.Create(finalFileName))
+                        {
+                            file.CopyTo(fs);
+                            fs.Flush();
+                            if (userList.userImages.ContainsKey(model.Name))
+                                userList.userImages[model.Name] = "/images/" + filename;
+                            else
+                                userList.userImages.Add(model.Name, "/images/" + filename);
+                        }
+                    }
                     // For more information on how to enable account confirmation and password reset please visit http://go.microsoft.com/fwlink/?LinkID=532713
                     // Send an email with this link
                     //var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
