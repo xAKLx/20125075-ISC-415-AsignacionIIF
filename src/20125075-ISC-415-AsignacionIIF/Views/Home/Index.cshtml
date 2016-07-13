@@ -43,7 +43,7 @@
             if(g != null && g.children != null)
                 for (var i = 0, len = g.children.length; i < len; i++) {
                     g.children[i].onclick = function () {
-                        selectedUser = this.children[0].textContent;
+                        selectedUser = this.children[1].textContent;
                         setInterval(requestChat, seconds * 1000);
                     }
                 }

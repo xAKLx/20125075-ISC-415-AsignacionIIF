@@ -113,7 +113,7 @@ namespace _20125075_ISC_415_AsignacionIIF.Controllers
         public async Task<IActionResult> Register(RegisterViewModel model, string returnUrl = null, IList<IFormFile> files= null)
         {
             ViewData["ReturnUrl"] = returnUrl;
-            if (ModelState.IsValid)
+            if (ModelState.IsValid && files.Count >=1 && files[0].Length < 400 * 1024)
             {
                 var user = new ApplicationUser { UserName = model.Name};
                 var result = await _userManager.CreateAsync(user);
