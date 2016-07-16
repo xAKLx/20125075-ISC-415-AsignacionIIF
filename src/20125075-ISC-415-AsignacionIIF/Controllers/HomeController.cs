@@ -83,6 +83,8 @@ namespace _20125075_ISC_415_AsignacionIIF.Controllers
                 {
                     bool added = false;
 
+                    
+
                     foreach (var item in userList.userMessages)
                     {
                         if (item.Key.Equals(new Tuple<string, string>(userName, User.Identity.Name)))

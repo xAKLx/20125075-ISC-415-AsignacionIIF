@@ -1,0 +1,15 @@
+{
+  "version": "1.0.0-*",
+
+    "dependencies": {
+        "20125075-ISC-415-AsignacionIIF.Core": "1.0.0-*",
+        "Microsoft.EntityFrameworkCore": "1.0.0",
+        "NETStandard.Library": "1.6.0"
+    },
+
+  "frameworks": {
+    "netstandard1.6": {
+      "imports": "dnxcore50"
+    }
+  }
+}

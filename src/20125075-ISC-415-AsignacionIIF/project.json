@@ -37,10 +37,12 @@
       "version": "1.0.0-preview2-final",
       "type": "build"
     },
-    "Microsoft.VisualStudio.Web.CodeGenerators.Mvc":  {
-      "version": "1.0.0-preview2-final",
-      "type": "build"
-    }
+    "Microsoft.VisualStudio.Web.CodeGenerators.Mvc": {
+        "version": "1.0.0-preview2-final",
+        "type": "build"
+    },
+    "20125075-ISC-415-AsignacionIIF.Infrastructure": "1.0.0-*",
+    "20125075-ISC-415-AsignacionIIF.Core": "1.0.0-*"
   },
 
     "tools": {

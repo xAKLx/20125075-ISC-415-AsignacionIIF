@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace _20125075_ISC_415_AsignacionIIF.Core.Interfaces
 {
-    interface IMessageRepository
+    public interface IMessageRepository
     {
         void Add(Message m);
 
