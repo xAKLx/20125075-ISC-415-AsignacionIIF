@@ -13,6 +13,7 @@ using _20125075_ISC_415_AsignacionIIF.Data;
 using _20125075_ISC_415_AsignacionIIF.Models;
 using _20125075_ISC_415_AsignacionIIF.Services;
 using Microsoft.AspNetCore.Http;
+using _20125075_ISC_415_AsignacionIIF.Infrastructure;
 
 namespace _20125075_ISC_415_AsignacionIIF
 {
@@ -48,6 +49,9 @@ namespace _20125075_ISC_415_AsignacionIIF
 
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
+            services.AddDbContext<MessageContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"), b => b.MigrationsAssembly("20125075-ISC-415-AsignacionIIF")));
 
             services.AddIdentity<ApplicationUser, IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()

@@ -14,6 +14,7 @@ namespace _20125075_ISC_415_AsignacionIIF.Models
         public Dictionary<String, DateTime> userList = new Dictionary<String, DateTime>();
         //public Dictionary<Tuple<String, String>, List<Message>> userMessages = new Dictionary<Tuple<String, String>, List<Message>>();
         public Dictionary<String, String> userImages = new Dictionary<String, String>();
+        MessageRepository repo = new MessageRepository();
 
        private Users()
         {
@@ -27,7 +28,7 @@ namespace _20125075_ISC_415_AsignacionIIF.Models
             return uniqueInstance;
         }
 
-        public ICollection<Message> getOrderedMessages(String user1, String user2, MessageRepository repo)
+        public ICollection<Message> getOrderedMessages(String user1, String user2)
         {
             var list = new List<Message>();
 
@@ -35,6 +36,18 @@ namespace _20125075_ISC_415_AsignacionIIF.Models
             list.AddRange(repo.Find(user2, user1));
 
             return list.OrderBy(o => o.Date).ToList();
+        }
+
+        public bool addMessage(String sender, String receiver, String content)
+        {
+            repo.Add(new Message() {
+                Sender = sender,
+                Receiver = receiver,
+                Content = content,
+                Date = DateTime.Now
+            });
+
+            return true;
         }
     }
 }

@@ -10,9 +10,9 @@ namespace _20125075_ISC_415_AsignacionIIF.Infrastructure
 {
     public class MessageRepository : IMessageRepository
     {
-        DataContext context = new DataContext();
+        MessageContext context = new MessageContext();
 
-        public void Add(Message m)
+        public void  Add(Message m)
         {
             context.Messages.Add(m);
             context.SaveChanges();

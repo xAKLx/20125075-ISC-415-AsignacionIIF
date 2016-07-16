@@ -1,9 +1,10 @@
+@using _20125075_ISC_415_AsignacionIIF.Core
 @model List<Message>
 
 @foreach (var msg in Model)
             {
     <div class="col-md-12 message">
-        @(msg.From + ": " + msg.Content)
+        @(msg.Sender + ": " + msg.Content + " Date: "+ msg.Date.ToString())
     </div>
 }
 

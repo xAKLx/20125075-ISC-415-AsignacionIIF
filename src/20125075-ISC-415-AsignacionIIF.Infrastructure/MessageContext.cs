@@ -7,9 +7,14 @@ using System.Threading.Tasks;
 
 namespace _20125075_ISC_415_AsignacionIIF.Infrastructure
 {
-    public class DataContext: DbContext
+    public class MessageContext: DbContext
     {
-        public DataContext() : base()
+        public MessageContext(DbContextOptions<MessageContext> options) : base(options)
+        {
+
+        }
+
+        public MessageContext(): base()
         {
 
         }

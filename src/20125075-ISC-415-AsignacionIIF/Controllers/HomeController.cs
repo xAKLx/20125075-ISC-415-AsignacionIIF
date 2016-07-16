@@ -83,27 +83,7 @@ namespace _20125075_ISC_415_AsignacionIIF.Controllers
                 {
                     bool added = false;
 
-                    
-
-                    foreach (var item in userList.userMessages)
-                    {
-                        if (item.Key.Equals(new Tuple<string, string>(userName, User.Identity.Name)))
-                        {
-                            userList.userMessages[new Tuple<string, string>(userName, User.Identity.Name)].Add(new Message(userName, User.Identity.Name, message));
-                            added = true;
-                        }
-                        else if(item.Key.Equals(new Tuple<string, string>(User.Identity.Name, userName)))
-                        {
-                            userList.userMessages[new Tuple<string, string>(User.Identity.Name, userName)].Add(new Message(userName, User.Identity.Name, message));
-                            added = true;
-                        }
-                    }
-
-                    if (!added)
-                    {
-                        userList.userMessages.Add(new Tuple<string, string>(User.Identity.Name, userName), new List<Message>());
-                        userList.userMessages[new Tuple<string, string>(User.Identity.Name, userName)].Add(new Message(userName, User.Identity.Name, message));
-                    }
+                    userList.addMessage(User.Identity.Name, userName, message);
                 }
 
                 return this.Json(string.Empty);
@@ -124,22 +104,7 @@ namespace _20125075_ISC_415_AsignacionIIF.Controllers
             {
                 if (userName != null && userName.Length != 0)
                 {
-                    Nullable<KeyValuePair<Tuple<string, string>, List<Message>>> messageList = null;
-
-                    if( !userList.userMessages.ContainsKey(new Tuple<string,string>(User.Identity.Name, userName)) && !userList.userMessages.ContainsKey(new Tuple<string, string>(userName, User.Identity.Name)))
-                    {
-                        userList.userMessages.Add(new Tuple<string, string>(User.Identity.Name, userName), new List<Message>());
-                    }
-
-                    foreach (var item in userList.userMessages)
-                        if (item.Key.Equals(new Tuple<string, string>(User.Identity.Name, userName)) || item.Key.Equals(new Tuple<string, string>(userName, User.Identity.Name)))
-                        {
-                            messageList = item;
-                            break;
-                        }
-
-
-                    return PartialView("_Chat", messageList.Value.Value);
+                    return PartialView("_Chat", userList.getOrderedMessages(User.Identity.Name, userName));
                 }
 
                 var list = new List<string>();
