@@ -129,5 +129,11 @@ namespace _20125075_ISC_415_AsignacionIIF.Controllers
         {
             return View();
         }
+
+        [Authorize(Policy = "RequireAdministratorRole")]
+        public IActionResult Admin()
+        {
+            return View();
+        }
     }
 }

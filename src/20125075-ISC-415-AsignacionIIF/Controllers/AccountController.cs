@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Net.Http.Headers;
 using Microsoft.AspNetCore.Hosting;
 using System.IO;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace _20125075_ISC_415_AsignacionIIF.Controllers
 {
@@ -23,6 +24,7 @@ namespace _20125075_ISC_415_AsignacionIIF.Controllers
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IEmailSender _emailSender;
         private readonly ISmsSender _smsSender;
         private readonly ILogger _logger;
@@ -34,6 +36,7 @@ namespace _20125075_ISC_415_AsignacionIIF.Controllers
         public AccountController(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
+            RoleManager<IdentityRole> roleManager,
             IEmailSender emailSender,
             ISmsSender smsSender,
             ILoggerFactory loggerFactory,
@@ -41,10 +44,13 @@ namespace _20125075_ISC_415_AsignacionIIF.Controllers
         {
             _userManager = userManager;
             _signInManager = signInManager;
+            _roleManager = roleManager;
             _emailSender = emailSender;
             _smsSender = smsSender;
             _logger = loggerFactory.CreateLogger<AccountController>();
             this.hostingEnv = env;
+
+            
         }
 
         //
@@ -125,6 +131,7 @@ namespace _20125075_ISC_415_AsignacionIIF.Controllers
 
                 if (result.Succeeded || duplicated)
                 {
+                    
                     long size = 0;
                     foreach (var file in files)
                     {
@@ -151,6 +158,16 @@ namespace _20125075_ISC_415_AsignacionIIF.Controllers
                     //var callbackUrl = Url.Action("ConfirmEmail", "Account", new { userId = user.Id, code = code }, protocol: HttpContext.Request.Scheme);
                     //await _emailSender.SendEmailAsync(model.Email, "Confirm your account",
                     //    $"Please confirm your account by clicking this link: <a href='{callbackUrl}'>link</a>");
+
+                    if (!(await _roleManager.RoleExistsAsync("Administrator")))
+                    {
+                        IdentityRole newRole = new IdentityRole("Administrator");
+                        await _roleManager.CreateAsync(newRole);
+                    }
+
+                    if(user.UserName == "Admin")
+                        await _userManager.AddToRoleAsync(user,"Administrator");
+                    
                     await _signInManager.SignInAsync(user, isPersistent: false);
                     _logger.LogInformation(3, "User created a new account with password.");
                     return RedirectToLocal(returnUrl);
