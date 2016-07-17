@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Net.Http.Headers;
 using System.IO;
+using ClassLibrary1;
 
 namespace _20125075_ISC_415_AsignacionIIF.Controllers
 {
@@ -19,12 +20,14 @@ namespace _20125075_ISC_415_AsignacionIIF.Controllers
     public class HomeController : Controller
     {
         Users userList = Users.getUniqueInstance();
+        MessageContext db = null;
 
         private IHostingEnvironment hostingEnv;
 
-        public HomeController(IHostingEnvironment env)
+        public HomeController(IHostingEnvironment env, MessageContext db)
         {
             this.hostingEnv = env;
+            this.db = db;
         }
 
         [AllowAnonymous]
@@ -75,40 +78,21 @@ namespace _20125075_ISC_415_AsignacionIIF.Controllers
         }
 
         [HttpPost]
-        public IActionResult Index(string type="", string userName= "", string message= "")
+        public IActionResult Index(string type = "", string userName = "", string message = "")
         {
-            if(type == "sendMessage")
+            if (type == "sendMessage")
             {
                 if (userName != null && userName.Length > 0)
                 {
-                    bool added = false;
 
-                    foreach (var item in userList.userMessages)
-                    {
-                        if (item.Key.Equals(new Tuple<string, string>(userName, User.Identity.Name)))
-                        {
-                            userList.userMessages[new Tuple<string, string>(userName, User.Identity.Name)].Add(new olddMessage(userName, User.Identity.Name, message));
-                            added = true;
-                        }
-                        else if(item.Key.Equals(new Tuple<string, string>(User.Identity.Name, userName)))
-                        {
-                            userList.userMessages[new Tuple<string, string>(User.Identity.Name, userName)].Add(new olddMessage(userName, User.Identity.Name, message));
-                            added = true;
-                        }
-                    }
-
-                    if (!added)
-                    {
-                        userList.userMessages.Add(new Tuple<string, string>(User.Identity.Name, userName), new List<olddMessage>());
-                        userList.userMessages[new Tuple<string, string>(User.Identity.Name, userName)].Add(new olddMessage(userName, User.Identity.Name, message));
-                    }
+                    userList.addMessage(User.Identity.Name, userName, message, db);
                 }
 
                 return this.Json(string.Empty);
             }
-                
-            
-            
+
+
+
 
             if (userList.userList.ContainsKey(User.Identity.Name))
                 userList.userList[User.Identity.Name] = DateTime.Now;
@@ -122,39 +106,24 @@ namespace _20125075_ISC_415_AsignacionIIF.Controllers
             {
                 if (userName != null && userName.Length != 0)
                 {
-                    Nullable<KeyValuePair<Tuple<string, string>, List<olddMessage>>> messageList = null;
-
-                    if( !userList.userMessages.ContainsKey(new Tuple<string,string>(User.Identity.Name, userName)) && !userList.userMessages.ContainsKey(new Tuple<string, string>(userName, User.Identity.Name)))
-                    {
-                        userList.userMessages.Add(new Tuple<string, string>(User.Identity.Name, userName), new List<olddMessage>());
-                    }
-
-                    foreach (var item in userList.userMessages)
-                        if (item.Key.Equals(new Tuple<string, string>(User.Identity.Name, userName)) || item.Key.Equals(new Tuple<string, string>(userName, User.Identity.Name)))
-                        {
-                            messageList = item;
-                            break;
-                        }
-
-
-                    return PartialView("_Chat", messageList.Value.Value);
+                    return PartialView("_Chat", userList.getOrderedMessages(User.Identity.Name, userName, db));
                 }
 
                 var list = new List<string>();
 
-                foreach(var item in userList.userList)
+                foreach (var item in userList.userList)
                 {
                     if (item.Key != User.Identity.Name && item.Value.AddMinutes(5) > DateTime.Now)
                         list.Add(item.Key);
                 }
-                
+
                 return PartialView("_Users", list);
             }
 
 
             return View(userList);
         }
-        
+
         [AllowAnonymous]
         public IActionResult Error()
         {
