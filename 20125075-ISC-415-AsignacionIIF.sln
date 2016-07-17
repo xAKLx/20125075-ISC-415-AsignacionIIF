@@ -12,6 +12,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "20125075-ISC-415-AsignacionIIF", "src\20125075-ISC-415-AsignacionIIF\20125075-ISC-415-AsignacionIIF.xproj", "{2DB3A1F2-4BCF-45F0-8189-62BF8813567B}"
 EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "ClassLibrary1", "src\ClassLibrary1\ClassLibrary1.xproj", "{9179BF2D-BDC3-4485-93C9-700B43390B93}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -22,11 +24,16 @@ Global
 		{2DB3A1F2-4BCF-45F0-8189-62BF8813567B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2DB3A1F2-4BCF-45F0-8189-62BF8813567B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2DB3A1F2-4BCF-45F0-8189-62BF8813567B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9179BF2D-BDC3-4485-93C9-700B43390B93}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9179BF2D-BDC3-4485-93C9-700B43390B93}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9179BF2D-BDC3-4485-93C9-700B43390B93}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9179BF2D-BDC3-4485-93C9-700B43390B93}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{2DB3A1F2-4BCF-45F0-8189-62BF8813567B} = {A32C91CB-9ADB-4BBF-956C-51BCEDE84F6A}
+		{9179BF2D-BDC3-4485-93C9-700B43390B93} = {A32C91CB-9ADB-4BBF-956C-51BCEDE84F6A}
 	EndGlobalSection
 EndGlobal
