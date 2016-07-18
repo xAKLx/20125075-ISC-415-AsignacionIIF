@@ -1,0 +1,181 @@
+﻿@{
+    ViewData["Title"] = "DashBoard";
+}
+
+@model Dictionary<String, ICollection<ClassLibrary1.Message>>
+@using System.Collections.Generic;
+
+@if (Model.Keys.Count == 1 & Model[Model.Keys.First()].Count >= 1)
+{
+    <h1>Bienvenido al dashboard de: @Model.Keys.First()</h1>
+    
+    <div class="row">
+        <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
+            <canvas id="myBarChart" width="400" height="400"></canvas>
+        </div>
+
+        <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
+            <canvas id="myPieChart" width="400" height="400"></canvas>
+        </div>
+
+        <div class="col-lg-4 col-md-6 col-sm-6 col-xs-12">
+            <canvas id="myDonutChart" width="400" height="400"></canvas>
+        </div>
+    </div>
+
+}
+
+@section scripts{
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.1.6/Chart.min.js"></script>
+
+    <script>
+        var countSendedMessages = {};
+
+
+        @{var sendedMessagesCount = new Dictionary<String, int>();}
+        @{var totalMessagesCount = new Dictionary<String, int>();}
+
+        @foreach(var msg in Model.First().Value)
+        {
+            if (msg.Receiver != Model.First().Key)
+            {
+                if (!sendedMessagesCount.ContainsKey(msg.Receiver))
+                {
+                    sendedMessagesCount.Add(msg.Receiver, 0);
+                }
+
+                if (!totalMessagesCount.ContainsKey(msg.Receiver))
+                {
+                    totalMessagesCount.Add(msg.Receiver, 0);
+                }
+
+                sendedMessagesCount[msg.Receiver] += 1;
+                totalMessagesCount[msg.Receiver] += 1;
+            }
+        }
+
+        @foreach(var item in sendedMessagesCount)
+        {
+            @: countSendedMessages["@item.Key"] = @item.Value;
+
+        }
+
+        var countReceivedMessages = {};
+
+        @{ var receivedMessagesCount = new Dictionary<String, int>();}
+
+        @foreach(var msg in Model.First().Value)
+        {
+            if (msg.Sender != Model.First().Key)
+            {
+                if (!receivedMessagesCount.ContainsKey(msg.Sender))
+                {
+                    receivedMessagesCount.Add(msg.Sender, 0);
+                }
+
+                if (!totalMessagesCount.ContainsKey(msg.Sender))
+                {
+                    totalMessagesCount.Add(msg.Sender, 0);
+                }
+
+                receivedMessagesCount[msg.Sender] += 1;
+                totalMessagesCount[msg.Sender] += 1;
+            }
+        }
+
+        @foreach(var item in receivedMessagesCount)
+        {
+            @: countReceivedMessages["@item.Key"] = @item.Value;
+
+        }
+
+        var countTotalMessages ={};
+        @foreach(var item in totalMessagesCount)
+        {
+            @: countTotalMessages["@item.Key"] = @item.Value;
+
+        }
+
+
+
+        var labelSendedNames = [];
+        var labelReceivedNames = [];
+        var labelTotalNames = [];
+
+        var countSendedValues = [];
+        var countReceivedValues = [];
+        var countTotalValues = [];
+
+        var backgroundColorValues = [];
+        var backgroundColorValuesPie = [];
+        var backgroundColorValuesDonut = [];
+
+        for (var item in countSendedMessages){
+            labelSendedNames.push(item);
+            countSendedValues.push(countSendedMessages[item]);
+            backgroundColorValues.push("#"+((1<<24)*Math.random()|0).toString(16));
+        }
+
+        for (var item in countReceivedMessages){
+            labelReceivedNames.push(item);
+            countReceivedValues.push(countReceivedMessages[item]);
+            backgroundColorValuesPie.push("#"+((1<<24)*Math.random()|0).toString(16));
+        }
+
+        for (var item in countTotalMessages){
+            labelTotalNames.push(item);
+            countTotalValues.push(countTotalMessages[item]);
+            backgroundColorValuesDonut.push("#"+((1<<24)*Math.random()|0).toString(16));
+        }
+
+
+        var ctx = document.getElementById("myBarChart");
+        var myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labelSendedNames,
+                datasets: [{
+                    label: '# de mensajes enviados a',
+                    data: countSendedValues,
+                    backgroundColor: backgroundColorValues,
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        });
+
+
+        var ctx = document.getElementById("myPieChart");
+        var myPieChart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: labelReceivedNames,
+                datasets: [{
+                    label: '# de mensajes recibidos de',
+                    data: countReceivedValues,
+                    backgroundColor: backgroundColorValuesPie,
+                }]
+            }
+        });
+
+        var ctx = document.getElementById("myDonutChart");
+        var myDonutChart = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: labelReceivedNames,
+                datasets: [{
+                    label: '# total de mensajes',
+                    data: countReceivedValues,
+                    backgroundColor: backgroundColorValuesDonut,
+                }]
+            }
+        });
+    </script>
+}

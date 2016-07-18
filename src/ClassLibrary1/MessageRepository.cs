@@ -32,6 +32,17 @@ namespace ClassLibrary1
             return list;
         }
 
+        public ICollection<Message> Find(string user)
+        {
+            var list = new List<Message>();
+
+            foreach (var message in context.Messages)
+                if (message.Sender == user || message.Receiver == user)
+                    list.Add(message);
+
+            return list;
+        }
+
         public IEnumerable GetMessages()
         {
             return context.Messages;

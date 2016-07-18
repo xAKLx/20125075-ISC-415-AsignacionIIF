@@ -16,7 +16,7 @@ using ClassLibrary1;
 
 namespace _20125075_ISC_415_AsignacionIIF.Controllers
 {
-    [Authorize]
+    
     public class HomeController : Controller
     {
         Users userList = Users.getUniqueInstance();
@@ -54,6 +54,7 @@ namespace _20125075_ISC_415_AsignacionIIF.Controllers
             return View();
         }
 
+        [Authorize]
         public IActionResult Index()
         {
             if (userList.userList.ContainsKey(User.Identity.Name))
@@ -77,6 +78,7 @@ namespace _20125075_ISC_415_AsignacionIIF.Controllers
             return View(userList);
         }
 
+        [Authorize]
         [HttpPost]
         public IActionResult Index(string type = "", string userName = "", string message = "")
         {
@@ -133,7 +135,20 @@ namespace _20125075_ISC_415_AsignacionIIF.Controllers
         [Authorize(Policy = "RequireAdministratorRole")]
         public IActionResult Admin()
         {
-            return View();
+            return View(userList);
+        }
+
+        [Authorize(Policy = "RequireAdministratorRole")]
+        public IActionResult Dashboard(string userName = "")
+        {
+            if (userName.Length == 0)
+                return this.Json("<h1>no usuario con ese userName</h1>");
+
+            var dict = new Dictionary<String, ICollection<Message>>();
+
+            dict[userName] = userList.getAllMessagesOf(userName, db);
+
+            return View(dict);
         }
     }
 }

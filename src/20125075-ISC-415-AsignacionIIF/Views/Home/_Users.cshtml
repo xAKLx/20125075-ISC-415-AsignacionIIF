@@ -3,10 +3,22 @@
 <div id="contacts" class="col-md-12">
     @foreach (var user in Model)
     {
-        <div class="row contact">
-            <div class="col-md-3"><img class="contactImage image" src="@Users.getUniqueInstance().userImages[user]" /></div>
-            <div class="col-md-9 contactName">@user</div>
-        </div>
+        @try
+        {
+            <div class="row contact">
+                <div class="col-md-3"><img class="contactImage image" src="@Users.getUniqueInstance().userImages[user]" /></div>
+                <div class="col-md-9 contactName">@user</div>
+            </div>
+        }
+        catch (Exception)
+        {
+            <div class="row contact">
+                <div class="col-md-3"><img class="contactImage image" src="http://placekitten.com/1300/600" /></div>
+                <div class="col-md-9 contactName">@user</div>
+            </div>
+
+        }
+
     }
 </div>
 

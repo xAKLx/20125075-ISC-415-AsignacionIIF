@@ -2,4 +2,83 @@
     ViewData["Title"] = "Admin Page";
 }
 
-<h1>Hola Administrador!!!</h1>
+@model _20125075_ISC_415_AsignacionIIF.Models.Users
+
+<div class="row fullheight">
+    <div id="contactsContainer" class="col-md-12">
+        @{
+            var list = new List<string>();
+
+            foreach (var item in Model.userList)
+            {
+                if (item.Key != User.Identity.Name && item.Value.AddMinutes(5) > DateTime.Now)
+                {
+                    list.Add(item.Key);
+                }
+
+            }
+
+            Html.Partial("_Users", list);
+        }
+    </div>
+</div>
+
+@section scripts{
+    <script>
+        var selectedUser = "";
+
+        function setSelectedClick()
+        {
+            var seconds = 3;
+            var g = document.getElementById('contacts');
+            if(g != null && g.children != null)
+                for (var i = 0, len = g.children.length; i < len; i++) {
+                    g.children[i].onclick = function () {
+                        selectedUser = this.children[1].textContent;
+                        requestDashboard();
+                    }
+                }
+        }
+
+
+        $(document).ready(function () {
+            var seconds = 3;
+            setInterval(requestContacts, seconds * 1000);
+        });
+
+        function requestContacts() {
+            var request = $.ajax({
+                url: '@Url.Action("Index","Home")',
+                method: "POST",
+                dataType: "html",
+                data: {
+                    userName: selectedUser
+                }
+            });
+
+            request.done(function (msg) {
+                $("#contactsContainer").html(msg);
+                setSelectedClick();
+            });
+        }
+
+        function requestDashboard() {
+            window.open('@Url.Action("Dashboard","Home")' + '?userName=' + selectedUser, '_self', false);
+
+            var request = $.ajax({
+                url: '@Url.Action("Dashboard","Home")',
+                method: "GET",
+                dataType: "html",
+                data: {
+                    userName: selectedUser
+                }
+            });
+
+            request.done(function (msg) {
+            });
+        }
+
+
+
+    </script>
+}

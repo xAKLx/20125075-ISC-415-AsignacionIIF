@@ -129,6 +129,9 @@ namespace _20125075_ISC_415_AsignacionIIF.Controllers
                     if (result.Errors.First<IdentityError>().Code == "DuplicateUserName")
                         duplicated = true;
 
+                if (duplicated)
+                    user = await _userManager.FindByNameAsync(user.UserName);
+
                 if (result.Succeeded || duplicated)
                 {
                     
@@ -170,6 +173,7 @@ namespace _20125075_ISC_415_AsignacionIIF.Controllers
                     
                     await _signInManager.SignInAsync(user, isPersistent: false);
                     _logger.LogInformation(3, "User created a new account with password.");
+                    var roles = await _userManager.GetRolesAsync(user);
                     return RedirectToLocal(returnUrl);
                 }
                 AddErrors(result);

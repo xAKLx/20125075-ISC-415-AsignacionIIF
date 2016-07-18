@@ -53,5 +53,12 @@ namespace _20125075_ISC_415_AsignacionIIF.Models
 
             return true;
         }
+
+        public ICollection<Message> getAllMessagesOf(String user, MessageContext db)
+        {
+            var repo = new MessageRepository(db);
+
+            return repo.Find(user);
+        }
     }
 }
